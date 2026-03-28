@@ -29,13 +29,13 @@ Presentamos un sistema de gestion de envios que permite a Operadores y Superviso
 1. Clonar el repositorio:
 
 ```bash
-git clone https://github.com/gonzalomartinez520/LogiTrack.git
+git clone https://github.com/gonzalomartinez520/LogiTrack-GRUPO-5.git
 ```
 
 2. Entrar al proyecto:
 
 ```bash
-cd LogiTrack
+cd LogiTrack-GRUPO-5
 ```
 (Depende que utilicemos en el proyecto, hara falta agregar mas pasos para que el usuario pueda utilizarlo)
 
