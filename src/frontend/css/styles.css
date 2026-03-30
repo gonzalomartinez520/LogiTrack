@@ -81,3 +81,13 @@ th, td {
   padding: 5px 10px;
   border-radius: 10px;
 }
+
+.detalle-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+hr {
+  margin: 20px 0;
+}
