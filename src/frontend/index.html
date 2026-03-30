@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>LogiTrack</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <h1 class="logo">📦 LogiTrack</h1>
+
+  <nav>
+    <a class="active">Listado de Envíos</a>
+    <a href="crear.html">Crear Envío</a>
+  </nav>
+
+  <div class="user">
+    Usuario | Operador
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- Cards -->
+  <section class="cards">
+    <div class="card">Total de Envíos: <b>1</b></div>
+    <div class="card warning">En Sucursal: <b>1</b></div>
+    <div class="card info">En Tránsito: <b>0</b></div>
+    <div class="card success">Entregados: <b>0</b></div>
+  </section>
+
+  <!-- Buscador -->
+  <input class="search" placeholder="Buscar por tracking ID o destinatario...">
+
+  <!-- Tabla -->
+  <table>
+    <thead>
+      <tr>
+        <th>Tracking ID</th>
+        <th>Destinatario</th>
+        <th>Estado</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td class="link">ENV-16593</td>
+        <td>gonzalo</td>
+        <td><span class="badge">En Sucursal</span></td>
+        <td>30/03/2026</td>
+        <td>
+          <a href="detalle.html">Ver detalle</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</main>
+
+</body>
+</html>
