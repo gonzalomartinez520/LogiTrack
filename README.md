@@ -15,11 +15,8 @@ Presentamos un sistema de gestion de envios que permite a Operadores y Superviso
 
 ## 🛠️ Tecnologías utilizadas
 
-(Depende de que utilicemos, lo agregamos mas tarde)
-
-* Backend: 
-* Base de datos: 
-* Frontend: 
+* Backend: Java con Spring Boot
+* Frontend: HTML5 Y CSS
 * Control de versiones: Git
 
 ---
@@ -37,7 +34,6 @@ git clone https://github.com/gonzalomartinez520/LogiTrack-GRUPO-5.git
 ```bash
 cd LogiTrack-GRUPO-5
 ```
-(Depende que utilicemos en el proyecto, hara falta agregar mas pasos para que el usuario pueda utilizarlo)
 
 3. Instalar dependencias:
 
