@@ -1,32 +1,45 @@
-document.getElementById("form-envio")?.addEventListener("submit", function(e) {
-  e.preventDefault();
+const API_URL = "https://backend-logicatrack-production.up.railway.app";
 
-  const campos = [
-    "remitente",
-    "destinatario",
-    "ciudadOrigen",
-    "paisOrigen",
-    "direccionOrigen",
-    "ciudadDestino",
-    "paisDestino",
-    "direccionDestino"
-  ];
+document.addEventListener("DOMContentLoaded", () => {
 
-  let faltantes = [];
+  const form = document.querySelector("form");
 
-  campos.forEach(id => {
-    const valor = document.getElementById(id).value.trim();
-    if (!valor) {
-      faltantes.push(id);
-    }
+  form.addEventListener("submit", function (e) {
+
+    e.preventDefault();
+
+    const remitente = document.getElementById("remitente").value;
+    const destinatario = document.getElementById("destinatario").value;
+    const origen = document.getElementById("ciudadOrigen").value;
+    const destino = document.getElementById("ciudadDestino").value;
+
+    const envio = {
+      remitente: remitente,
+      destinatario: destinatario,
+      origen: origen,
+      destino: destino
+    };
+
+    fetch(API_URL + "/envios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(envio)
+    })
+      .then(response => response.json())
+      .then(data => {
+
+        alert("Envío creado correctamente");
+
+        window.location.href = "index.html";
+
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Error al crear el envío");
+      });
+
   });
 
-  if (faltantes.length > 0) {
-    alert("Faltan completar campos obligatorios");
-    return;
-  }
-
-  alert("Envío creado correctamente (simulado)");
-
-  window.location.href = "index.html";
 });
