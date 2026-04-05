@@ -17,7 +17,11 @@
   </nav>
 
   <div class="user">
-    Usuario | Operador
+    Usuario |
+    <select id="rol">
+      <option value="operador">Operador</option>
+      <option value="supervisor">Supervisor</option>
+    </select>
   </div>
 </header>
 
@@ -37,6 +41,9 @@
 
   <span id="estado" class="badge"></span>
 </div>
+
+<!-- 🔥 BOTONES SOLO PARA SUPERVISOR -->
+<div id="accionesSupervisor" style="margin: 15px 0;"></div>
 
 <!-- Información General -->
 <div class="card">

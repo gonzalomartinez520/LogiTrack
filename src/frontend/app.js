@@ -1,8 +1,31 @@
 const API_URL = "https://backend-logicatrack-production.up.railway.app";
 
-document.addEventListener("DOMContentLoaded", () => {
+let rolActual = localStorage.getItem("rol") || "operador";
 
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarRol();
+  inicializarFormulario();
+});
+
+// 🔥 Manejo de rol (igual que en detalle.js)
+function inicializarRol() {
+  const selectRol = document.getElementById("rol");
+
+  if (!selectRol) return;
+
+  selectRol.value = rolActual;
+
+  selectRol.addEventListener("change", (e) => {
+    rolActual = e.target.value;
+    localStorage.setItem("rol", rolActual);
+  });
+}
+
+// 🔥 Lógica del formulario
+function inicializarFormulario() {
   const form = document.querySelector("form");
+
+  if (!form) return;
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -37,6 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         alert("Envío creado correctamente");
 
+        // 🔥 Opcional: limpiar form antes de irse
+        form.reset();
+
         // Redirige al listado
         window.location.href = "index.html";
       })
@@ -44,7 +70,5 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error:", error);
         alert("Error al crear el envío");
       });
-
   });
-
-});
+}

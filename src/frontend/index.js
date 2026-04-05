@@ -1,6 +1,26 @@
 const API_URL = "https://backend-logicatrack-production.up.railway.app";
 
-document.addEventListener("DOMContentLoaded", cargarEnvios);
+let rolActual = localStorage.getItem("rol") || "operador";
+
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarRol();
+  cargarEnvios();
+});
+
+function inicializarRol() {
+
+  const selectRol = document.getElementById("rol");
+
+  // Setear valor guardado
+  selectRol.value = rolActual;
+
+  // Escuchar cambios
+  selectRol.addEventListener("change", (e) => {
+    rolActual = e.target.value;
+    localStorage.setItem("rol", rolActual);
+  });
+
+}
 
 function cargarEnvios() {
 

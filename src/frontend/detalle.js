@@ -1,6 +1,27 @@
 const API_URL = "https://backend-logicatrack-production.up.railway.app";
 
-document.addEventListener("DOMContentLoaded", cargarDetalle);
+let rolActual = localStorage.getItem("rol") || "operador";
+
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarRol();
+  cargarDetalle();
+});
+
+function inicializarRol() {
+  const selectRol = document.getElementById("rol");
+
+  if (!selectRol) return;
+
+  selectRol.value = rolActual;
+
+  selectRol.addEventListener("change", (e) => {
+    rolActual = e.target.value;
+    localStorage.setItem("rol", rolActual);
+
+    // Recargar para aplicar cambios de UI
+    location.reload();
+  });
+}
 
 function cargarDetalle() {
 
@@ -23,28 +44,28 @@ function cargarDetalle() {
 
       console.log("Detalle:", envio);
 
-      // ⚠️ Si usás <p> → textContent
-      // ⚠️ Si usás <input> → value
-      // (te dejo compatible con ambos)
-
       setValor("tracking", envio.trackingId);
       setValor("remitente", envio.remitente);
       setValor("destinatario", envio.destinatario);
 
-      setValor("origenCiudad", envio.origen);
-      setValor("destinoCiudad", envio.destino);
+      // 🔥 FIX IMPORTANTE
+      setValor("ciudadOrigen", envio.origen);
+      setValor("ciudadDestino", envio.destino);
 
       setValor("fecha", formatearFecha(envio.fechaCreacion));
 
-      // Estado (por si es select o texto)
+      const estadoActual = envio.estadoActual || envio.estado;
+
       const estadoEl = document.getElementById("estado");
       if (estadoEl) {
-        if (estadoEl.tagName === "SELECT") {
-          estadoEl.value = envio.estadoActual || envio.estado;
-        } else {
-          estadoEl.textContent = envio.estadoActual || envio.estado;
-        }
+        estadoEl.textContent = estadoActual || "SIN ESTADO";
       }
+
+      // 🔥 Mostrar botones según rol
+      renderAccionesSupervisor(envio, estadoActual);
+
+      // 🔥 Historial básico
+      renderHistorial(envio);
 
     })
     .catch(error => {
@@ -53,7 +74,71 @@ function cargarDetalle() {
     });
 }
 
-// 🔧 Función para soportar input o texto
+function renderAccionesSupervisor(envio, estadoActual) {
+
+  const contenedor = document.getElementById("accionesSupervisor");
+  if (!contenedor) return;
+
+  contenedor.innerHTML = "";
+
+  if (rolActual !== "supervisor") return;
+
+  const estados = ["EN_SUCURSAL", "EN_TRANSITO", "ENTREGADO"];
+
+  estados.forEach(estado => {
+
+    if (estado === estadoActual) return;
+
+    const btn = document.createElement("button");
+    btn.textContent = `Pasar a ${estado}`;
+    btn.style.marginRight = "10px";
+
+    btn.onclick = () => cambiarEstado(envio.trackingId, estado);
+
+    contenedor.appendChild(btn);
+  });
+}
+
+// 🔥 Simulación de cambio de estado
+function cambiarEstado(trackingId, nuevoEstado) {
+
+  alert(`Simulación: cambiar ${trackingId} a ${nuevoEstado}`);
+
+  // Si después querés hacerlo real:
+  /*
+  fetch(`${API_URL}/envios/${trackingId}/estado`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ estado: nuevoEstado })
+  })
+  .then(() => location.reload());
+  */
+}
+
+// 🔥 Historial básico (por ahora)
+function renderHistorial(envio) {
+
+  const ul = document.getElementById("historial");
+  if (!ul) return;
+
+  ul.innerHTML = "";
+
+  if (!envio.historial || envio.historial.length === 0) {
+    ul.innerHTML = "<li>Sin cambios registrados</li>";
+    return;
+  }
+
+  envio.historial.forEach(item => {
+
+    const li = document.createElement("li");
+
+    li.textContent = `${item.estado} - ${formatearFecha(item.fecha)}`;
+
+    ul.appendChild(li);
+  });
+}
+
+// 🔧 Compatible con input o texto
 function setValor(id, valor) {
   const el = document.getElementById(id);
   if (!el) return;
