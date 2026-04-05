@@ -39,65 +39,66 @@
     <p class="subtitle">Solo los supervisores pueden cambiar el estado</p>
   </div>
 
-  <!-- 🔥 importante: dejamos limpio para que JS controle todo -->
   <span id="estado" class="badge">-</span>
 </div>
 
-<!-- 🔥 BOTONES SOLO PARA SUPERVISOR -->
+<!-- BOTONES SUPERVISOR -->
 <div id="accionesSupervisor" style="margin: 15px 0;"></div>
 
 <!-- Información General -->
 <div class="card">
-<h3>Información General</h3>
+  <h3>Información General</h3>
 
-<div class="grid2">
+  <div class="grid2">
 
-<div>
-<label>Remitente</label>
-<p id="remitente"></p>
-</div>
+    <div>
+      <label>Remitente</label>
+      <p id="remitente"></p>
+    </div>
 
-<div>
-<label>Destinatario</label>
-<p id="destinatario"></p>
-</div>
+    <div>
+      <label>Destinatario</label>
+      <p id="destinatario"></p>
+    </div>
 
-<div>
-<label>Fecha de Creación</label>
-<p id="fecha"></p>
-</div>
+    <div>
+      <label>Fecha de Creación</label>
+      <p id="fecha"></p>
+    </div>
 
-</div>
+  </div>
 </div>
 
 <!-- Origen y Destino -->
 <div class="grid2">
 
-<div class="card">
-<h3>Origen</h3>
+  <div class="card">
+    <h3>Origen</h3>
 
-<label>Ciudad</label>
-<p id="ciudadOrigen"></p>
+    <label>Ciudad</label>
+    <p id="ciudadOrigen"></p>
 
-</div>
+  </div>
 
-<div class="card">
-<h3>Destino</h3>
+  <div class="card">
+    <h3>Destino</h3>
 
-<label>Ciudad</label>
-<p id="ciudadDestino"></p>
+    <label>Ciudad</label>
+    <p id="ciudadDestino"></p>
 
-</div>
+  </div>
 
 </div>
 
 <!-- Historial -->
 <div class="card">
 
-<h3>Historial de Cambios de Estado</h3>
+  <h3>Historial de Cambios de Estado</h3>
 
-<!-- 🔥 vacío: JS se encarga -->
-<ul id="historial"></ul>
+  <!-- 🔥 mensaje por defecto (mejor UX mientras carga) -->
+  <ul id="historial">
+    <li>Cargando historial...</li>
+  </ul>
 
 </div>
 

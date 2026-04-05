@@ -33,7 +33,7 @@ function cargarDetalle() {
   }
 
   fetch(`${API_URL}/envios/${tracking}`, {
-    cache: "no-store" // 🔥 evita cache
+    cache: "no-store"
   })
     .then(res => {
       if (!res.ok) {
@@ -60,7 +60,9 @@ function cargarDetalle() {
       }
 
       renderAccionesSupervisor(envio, estadoActual);
-      renderHistorial(envio);
+
+      // 🔥 ahora pasamos tracking también
+      renderHistorial(envio.trackingId);
 
     })
     .catch(error => {
@@ -94,11 +96,26 @@ function renderAccionesSupervisor(envio, estadoActual) {
   });
 }
 
-// 🔥 FIX REAL ACÁ
+// 🔥 NUEVA FUNCIÓN: guardar historial
+function guardarHistorial(trackingId, nuevoEstado) {
+
+  const key = `historial_${trackingId}`;
+
+  const historial = JSON.parse(localStorage.getItem(key)) || [];
+
+  historial.push({
+    estado: nuevoEstado,
+    fecha: new Date().toISOString()
+  });
+
+  localStorage.setItem(key, JSON.stringify(historial));
+}
+
+// 🔥 FIX + historial
 function cambiarEstado(trackingId, nuevoEstado) {
 
   fetch(`${API_URL}/envios/${trackingId}/estado`, {
-    method: "PATCH", // ✅ CORREGIDO
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json"
     },
@@ -108,19 +125,20 @@ function cambiarEstado(trackingId, nuevoEstado) {
       if (!res.ok) {
         throw new Error("Error al actualizar el estado");
       }
-
-      // ⚠️ el backend puede no devolver JSON
       return res.text();
     })
     .then(() => {
 
-      // ✅ actualización inmediata sin esperar reload completo
+      // ✅ guardar historial en frontend
+      guardarHistorial(trackingId, nuevoEstado);
+
+      // ✅ actualizar UI inmediata
       const estadoEl = document.getElementById("estado");
       if (estadoEl) {
         estadoEl.textContent = nuevoEstado;
       }
 
-      // 🔥 recargar datos reales del backend
+      // 🔥 recargar para renderizar historial nuevo
       cargarDetalle();
 
     })
@@ -130,19 +148,24 @@ function cambiarEstado(trackingId, nuevoEstado) {
     });
 }
 
-function renderHistorial(envio) {
+// 🔥 NUEVO render de historial desde localStorage
+function renderHistorial(trackingId) {
 
   const ul = document.getElementById("historial");
   if (!ul) return;
 
   ul.innerHTML = "";
 
-  if (!envio.historial || envio.historial.length === 0) {
+  const key = `historial_${trackingId}`;
+  const historial = JSON.parse(localStorage.getItem(key)) || [];
+
+  if (historial.length === 0) {
     ul.innerHTML = "<li>Sin cambios registrados</li>";
     return;
   }
 
-  envio.historial.forEach(item => {
+  // mostrar más reciente arriba
+  historial.slice().reverse().forEach(item => {
 
     const li = document.createElement("li");
     li.textContent = `${item.estado} - ${formatearFecha(item.fecha)}`;
