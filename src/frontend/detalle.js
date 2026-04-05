@@ -18,7 +18,6 @@ function inicializarRol() {
     rolActual = e.target.value;
     localStorage.setItem("rol", rolActual);
 
-    // Recargar para aplicar cambios de UI
     location.reload();
   });
 }
@@ -33,7 +32,9 @@ function cargarDetalle() {
     return;
   }
 
-  fetch(`${API_URL}/envios/${tracking}`)
+  fetch(`${API_URL}/envios/${tracking}`, {
+    cache: "no-store" // 🔥 evita cache
+  })
     .then(res => {
       if (!res.ok) {
         throw new Error("Error al obtener el envío");
@@ -42,13 +43,10 @@ function cargarDetalle() {
     })
     .then(envio => {
 
-      console.log("Detalle:", envio);
-
       setValor("tracking", envio.trackingId);
       setValor("remitente", envio.remitente);
       setValor("destinatario", envio.destinatario);
 
-      // 🔥 FIX IMPORTANTE
       setValor("ciudadOrigen", envio.origen);
       setValor("ciudadDestino", envio.destino);
 
@@ -61,10 +59,7 @@ function cargarDetalle() {
         estadoEl.textContent = estadoActual || "SIN ESTADO";
       }
 
-      // 🔥 Mostrar botones según rol
       renderAccionesSupervisor(envio, estadoActual);
-
-      // 🔥 Historial básico
       renderHistorial(envio);
 
     })
@@ -99,23 +94,42 @@ function renderAccionesSupervisor(envio, estadoActual) {
   });
 }
 
-// 🔥 Simulación de cambio de estado
+// 🔥 FIX REAL ACÁ
 function cambiarEstado(trackingId, nuevoEstado) {
 
-  alert(`Simulación: cambiar ${trackingId} a ${nuevoEstado}`);
-
-  // Si después querés hacerlo real:
-  /*
   fetch(`${API_URL}/envios/${trackingId}/estado`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    method: "PATCH", // ✅ CORREGIDO
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({ estado: nuevoEstado })
   })
-  .then(() => location.reload());
-  */
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("Error al actualizar el estado");
+      }
+
+      // ⚠️ el backend puede no devolver JSON
+      return res.text();
+    })
+    .then(() => {
+
+      // ✅ actualización inmediata sin esperar reload completo
+      const estadoEl = document.getElementById("estado");
+      if (estadoEl) {
+        estadoEl.textContent = nuevoEstado;
+      }
+
+      // 🔥 recargar datos reales del backend
+      cargarDetalle();
+
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("No se pudo actualizar el estado");
+    });
 }
 
-// 🔥 Historial básico (por ahora)
 function renderHistorial(envio) {
 
   const ul = document.getElementById("historial");
@@ -131,14 +145,12 @@ function renderHistorial(envio) {
   envio.historial.forEach(item => {
 
     const li = document.createElement("li");
-
     li.textContent = `${item.estado} - ${formatearFecha(item.fecha)}`;
 
     ul.appendChild(li);
   });
 }
 
-// 🔧 Compatible con input o texto
 function setValor(id, valor) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -150,7 +162,6 @@ function setValor(id, valor) {
   }
 }
 
-// 📅 Formatear fecha
 function formatearFecha(fecha) {
   if (!fecha) return "-";
 

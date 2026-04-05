@@ -26,16 +26,20 @@
 
 <main class="container">
 
-  <!-- Cards -->
+  <!-- 🔥 Cards dinámicas -->
   <section class="cards">
-    <div class="card">Total de Envíos: <b>1</b></div>
-    <div class="card warning">En Sucursal: <b>1</b></div>
-    <div class="card info">En Tránsito: <b>0</b></div>
-    <div class="card success">Entregados: <b>0</b></div>
+    <div class="card">Total de Envíos: <b id="totalEnvios">-</b></div>
+    <div class="card warning">En Sucursal: <b id="enSucursal">-</b></div>
+    <div class="card info">En Tránsito: <b id="enTransito">-</b></div>
+    <div class="card success">Entregados: <b id="entregados">-</b></div>
   </section>
 
-  <!-- Buscador -->
-  <input class="search" placeholder="Buscar por tracking ID o destinatario...">
+  <!-- 🔥 Buscador preparado para JS -->
+  <input 
+    id="buscador"
+    class="search" 
+    placeholder="Buscar por tracking ID o destinatario..."
+  >
 
   <!-- Tabla -->
   <table>
@@ -50,7 +54,7 @@
     </thead>
 
     <tbody>
-      <!-- Los envíos se cargan dinámicamente desde index.js -->
+      <!-- JS inserta los envíos acá -->
     </tbody>
   </table>
 

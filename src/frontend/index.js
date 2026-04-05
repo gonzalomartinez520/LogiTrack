@@ -8,23 +8,25 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function inicializarRol() {
-
   const selectRol = document.getElementById("rol");
+  if (!selectRol) return;
 
-  // Setear valor guardado
   selectRol.value = rolActual;
 
-  // Escuchar cambios
   selectRol.addEventListener("change", (e) => {
     rolActual = e.target.value;
     localStorage.setItem("rol", rolActual);
-  });
 
+    // 🔥 Refrescar lista al cambiar rol (por consistencia)
+    cargarEnvios();
+  });
 }
 
 function cargarEnvios() {
 
-  fetch(`${API_URL}/envios`)
+  fetch(`${API_URL}/envios`, {
+    cache: "no-store" // 🔥 evita cache (clave para ver cambios de estado)
+  })
     .then(response => {
       if (!response.ok) {
         throw new Error("Error al obtener los envíos");
@@ -34,9 +36,13 @@ function cargarEnvios() {
     .then(envios => {
 
       const tbody = document.querySelector("tbody");
+      if (!tbody) return;
+
       tbody.innerHTML = "";
 
       envios.forEach(envio => {
+
+        const estado = envio.estadoActual || envio.estado || "SIN ESTADO";
 
         const fila = document.createElement("tr");
 
@@ -44,7 +50,7 @@ function cargarEnvios() {
           <td class="link">${envio.trackingId || "-"}</td>
           <td>${envio.destinatario || "-"}</td>
           <td>
-            <span class="badge">${envio.estadoActual || "SIN ESTADO"}</span>
+            <span class="badge">${estado}</span>
           </td>
           <td>${formatearFecha(envio.fechaCreacion)}</td>
           <td>
@@ -55,7 +61,6 @@ function cargarEnvios() {
         `;
 
         tbody.appendChild(fila);
-
       });
 
     })
@@ -63,13 +68,14 @@ function cargarEnvios() {
       console.error("Error cargando envíos:", error);
 
       const tbody = document.querySelector("tbody");
+      if (!tbody) return;
+
       tbody.innerHTML = `
         <tr>
           <td colspan="5">Error al cargar los envíos</td>
         </tr>
       `;
     });
-
 }
 
 function formatearFecha(fecha) {
@@ -85,5 +91,4 @@ function formatearFecha(fecha) {
     month: "2-digit",
     year: "numeric"
   });
-
 }
