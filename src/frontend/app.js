@@ -1,104 +1,38 @@
 const API_URL = "https://backend-logicatrack-production.up.railway.app";
 
-let rolActual = localStorage.getItem("rol") || "operador";
+document.getElementById("form-envio").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-document.addEventListener("DOMContentLoaded", () => {
-  inicializarRol();
-  inicializarUsuario();
-  inicializarFormulario();
-});
+  const envio = {
+    remitente: document.getElementById("remitente").value,
+    destinatario: document.getElementById("destinatario").value,
+    origen: document.getElementById("ciudadOrigen").value,
+    destino: document.getElementById("ciudadDestino").value,
 
-// 🔥 Manejo de rol
-function inicializarRol() {
-  const selectRol = document.getElementById("rol");
+    // 🔥 IA
+    distancia_km: parseFloat(document.getElementById("distancia_km").value),
+    tipo_envio: document.getElementById("tipo_envio").value,
+    ventana_horaria: document.getElementById("ventana_horaria").value,
+    fragil: document.getElementById("fragil").checked ? 1 : 0,
+    frio: document.getElementById("frio").checked ? 1 : 0,
+    saturacion_ruta: parseFloat(document.getElementById("saturacion_ruta").value)
+  };
 
-  if (!selectRol) return;
-
-  selectRol.value = rolActual;
-
-  selectRol.addEventListener("change", (e) => {
-    rolActual = e.target.value;
-    localStorage.setItem("rol", rolActual);
-  });
-}
-
-// 🔥 Manejo del nombre de usuario
-function inicializarUsuario() {
-  const nombreElemento = document.getElementById("nombreUsuario");
-  const botonCambiar = document.getElementById("cambiarUsuario");
-
-  if (!nombreElemento) return;
-
-  // Cargar usuario guardado
-  let nombreGuardado = localStorage.getItem("usuario") || "Usuario";
-
-  nombreElemento.textContent = nombreGuardado;
-
-  // Cambiar usuario
-  if (botonCambiar) {
-    botonCambiar.addEventListener("click", () => {
-
-      const nuevoNombre = prompt("Ingrese su nombre de usuario:", nombreGuardado);
-
-      if (nuevoNombre && nuevoNombre.trim() !== "") {
-
-        localStorage.setItem("usuario", nuevoNombre);
-        nombreElemento.textContent = nuevoNombre;
-
-      }
-
-    });
-  }
-}
-
-// 🔥 Lógica del formulario
-function inicializarFormulario() {
-  const form = document.querySelector("form");
-
-  if (!form) return;
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const remitente = document.getElementById("remitente").value;
-    const destinatario = document.getElementById("destinatario").value;
-    const origen = document.getElementById("ciudadOrigen").value;
-    const destino = document.getElementById("ciudadDestino").value;
-
-    const envio = {
-      remitente,
-      destinatario,
-      origen,
-      destino
-    };
-
-    fetch(`${API_URL}/envios`, {
+  try {
+    const res = await fetch(`${API_URL}/envios`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(envio)
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Error en la respuesta del servidor");
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log("Envío creado:", data);
+    });
 
-        alert("Envío creado correctamente");
+    const data = await res.json();
 
-        form.reset();
+    alert("Envío creado con prioridad: " + data.prioridad);
 
-        window.location.href = "index.html";
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        alert("Error al crear el envío");
-      });
-  });
-}
-
-//version mala 
+  } catch (error) {
+    console.error(error);
+    alert("Error al crear envío");
+  }
+});

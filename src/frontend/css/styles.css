@@ -201,7 +201,7 @@ li{
 
 .card-form input,
 .card-form textarea {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   margin-top: 5px;
 }
@@ -228,9 +228,13 @@ li{
   cursor: pointer;
 }
 
+#fragil {
+  width: 15%;
+}
 
-
-
+#frio {
+  width: 6%;
+}
 
 
 
