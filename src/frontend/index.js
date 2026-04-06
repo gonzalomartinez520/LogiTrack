@@ -2,8 +2,12 @@ const API_URL = "https://backend-logicatrack-production.up.railway.app";
 
 let rolActual = localStorage.getItem("rol") || "operador";
 
+// 🔥 guardamos envíos globalmente para filtrar
+let enviosGlobal = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   inicializarRol();
+  inicializarBuscador();
   cargarEnvios();
 });
 
@@ -21,6 +25,26 @@ function inicializarRol() {
   });
 }
 
+// 🔥 NUEVO: buscador en tiempo real
+function inicializarBuscador() {
+  const input = document.getElementById("buscador");
+  if (!input) return;
+
+  input.addEventListener("input", () => {
+    const texto = input.value.toLowerCase();
+
+    const filtrados = enviosGlobal.filter(envio => {
+      const tracking = (envio.trackingId || "").toLowerCase();
+      const destinatario = (envio.destinatario || "").toLowerCase();
+
+      return tracking.includes(texto) || destinatario.includes(texto);
+    });
+
+    renderTabla(filtrados);
+    actualizarCards(filtrados);
+  });
+}
+
 function cargarEnvios() {
 
   fetch(`${API_URL}/envios`, {
@@ -34,50 +58,11 @@ function cargarEnvios() {
     })
     .then(envios => {
 
-      const tbody = document.querySelector("tbody");
-      if (!tbody) return;
+      // 🔥 guardamos globalmente
+      enviosGlobal = envios;
 
-      tbody.innerHTML = "";
-
-      // 🔥 CONTADORES
-      let total = envios.length;
-      let enSucursal = 0;
-      let enTransito = 0;
-      let entregados = 0;
-
-      envios.forEach(envio => {
-
-        const estado = envio.estadoActual || envio.estado || "SIN ESTADO";
-
-        // 🔥 CONTAR ESTADOS
-        if (estado === "EN_SUCURSAL") enSucursal++;
-        if (estado === "EN_TRANSITO") enTransito++;
-        if (estado === "ENTREGADO") entregados++;
-
-        const fila = document.createElement("tr");
-
-        fila.innerHTML = `
-          <td class="link">${envio.trackingId || "-"}</td>
-          <td>${envio.destinatario || "-"}</td>
-          <td>
-            <span class="badge">${estado}</span>
-          </td>
-          <td>${formatearFecha(envio.fechaCreacion)}</td>
-          <td>
-            <a href="detalle.html?tracking=${envio.trackingId}">
-              Ver detalle
-            </a>
-          </td>
-        `;
-
-        tbody.appendChild(fila);
-      });
-
-      // 🔥 ACTUALIZAR CARDS
-      setCard("totalEnvios", total);
-      setCard("enSucursal", enSucursal);
-      setCard("enTransito", enTransito);
-      setCard("entregados", entregados);
+      renderTabla(envios);
+      actualizarCards(envios);
 
     })
     .catch(error => {
@@ -92,7 +77,6 @@ function cargarEnvios() {
         </tr>
       `;
 
-      // 🔥 resetear cards en error
       setCard("totalEnvios", "-");
       setCard("enSucursal", "-");
       setCard("enTransito", "-");
@@ -100,7 +84,70 @@ function cargarEnvios() {
     });
 }
 
-// 🔥 helper para actualizar cards
+// 🔥 NUEVA: render de tabla reutilizable
+function renderTabla(envios) {
+
+  const tbody = document.querySelector("tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (envios.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5">No se encontraron envíos</td>
+      </tr>
+    `;
+    return;
+  }
+
+  envios.forEach(envio => {
+
+    const estado = envio.estadoActual || envio.estado || "SIN ESTADO";
+
+    const fila = document.createElement("tr");
+
+    fila.innerHTML = `
+      <td class="link">${envio.trackingId || "-"}</td>
+      <td>${envio.destinatario || "-"}</td>
+      <td>
+        <span class="badge">${estado}</span>
+      </td>
+      <td>${formatearFecha(envio.fechaCreacion)}</td>
+      <td>
+        <a href="detalle.html?tracking=${envio.trackingId}">
+          Ver detalle
+        </a>
+      </td>
+    `;
+
+    tbody.appendChild(fila);
+  });
+}
+
+// 🔥 NUEVA: actualizar estadísticas reutilizable
+function actualizarCards(envios) {
+
+  let total = envios.length;
+  let enSucursal = 0;
+  let enTransito = 0;
+  let entregados = 0;
+
+  envios.forEach(envio => {
+    const estado = envio.estadoActual || envio.estado;
+
+    if (estado === "EN_SUCURSAL") enSucursal++;
+    if (estado === "EN_TRANSITO") enTransito++;
+    if (estado === "ENTREGADO") entregados++;
+  });
+
+  setCard("totalEnvios", total);
+  setCard("enSucursal", enSucursal);
+  setCard("enTransito", enTransito);
+  setCard("entregados", entregados);
+}
+
+// helper
 function setCard(id, valor) {
   const el = document.getElementById(id);
   if (el) {

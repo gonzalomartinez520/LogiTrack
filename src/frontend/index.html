@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LogiTrack</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -34,12 +35,16 @@
     <div class="card success">Entregados: <b id="entregados">-</b></div>
   </section>
 
-  <!-- 🔥 Buscador preparado para JS -->
-  <input 
-    id="buscador"
-    class="search" 
-    placeholder="Buscar por tracking ID o destinatario..."
-  >
+  <!-- 🔥 Buscador -->
+  <div class="search-container">
+    <input 
+      type="text"
+      id="buscador"
+      class="search" 
+      placeholder="🔍 Buscar por tracking ID o destinatario..."
+      autocomplete="off"
+    >
+  </div>
 
   <!-- Tabla -->
   <table>
@@ -54,13 +59,15 @@
     </thead>
 
     <tbody>
-      <!-- JS inserta los envíos acá -->
+      <tr>
+        <td colspan="5">Cargando envíos...</td>
+      </tr>
     </tbody>
   </table>
 
 </main>
 
-<script src="index.js"></script>
+<script src="index.js" defer></script>
 
 </body>
 </html>
