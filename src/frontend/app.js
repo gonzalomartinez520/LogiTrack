@@ -29,63 +29,82 @@ function inicializarUsuario() {
 
   if (!nombreElemento) return;
 
-  // Cargar usuario guardado
   let nombreGuardado = localStorage.getItem("usuario") || "Usuario";
-
   nombreElemento.textContent = nombreGuardado;
 
-  // Cambiar usuario
   if (botonCambiar) {
     botonCambiar.addEventListener("click", () => {
 
       const nuevoNombre = prompt("Ingrese su nombre de usuario:", nombreGuardado);
 
       if (nuevoNombre && nuevoNombre.trim() !== "") {
-
         localStorage.setItem("usuario", nuevoNombre);
         nombreElemento.textContent = nuevoNombre;
-
       }
 
     });
   }
 }
 
-// 🔥 Lógica del formulario
+// 🔥 Lógica del formulario Crear Envío
 function inicializarFormulario() {
-  const form = document.querySelector("form");
+
+  const form = document.querySelector("#form-envio");
 
   if (!form) return;
 
   form.addEventListener("submit", function (e) {
+
     e.preventDefault();
 
-    const remitente = document.getElementById("remitente").value;
-    const destinatario = document.getElementById("destinatario").value;
-    const origen = document.getElementById("ciudadOrigen").value;
-    const destino = document.getElementById("ciudadDestino").value;
+    const remitente = document.getElementById("remitente")?.value;
+    const destinatario = document.getElementById("destinatario")?.value;
 
-    // 🔹 Nuevos campos para cálculo de prioridad
-    const distanciaKm = parseFloat(document.getElementById("distanciaKm").value);
-    const tipoEnvio = document.getElementById("tipoEnvio").value;
-    const ventanaHoraria = document.getElementById("ventanaHoraria").value;
-    const volumen = parseFloat(document.getElementById("volumen").value);
-    const saturacionRuta = parseFloat(document.getElementById("saturacionRuta").value);
-    const fragil = document.getElementById("fragil").checked;
-    const frio = document.getElementById("frio").checked;
+    const ciudadOrigen = document.getElementById("ciudadOrigen")?.value;
+    const paisOrigen = document.getElementById("paisOrigen")?.value;
+    const direccionOrigen = document.getElementById("direccionOrigen")?.value;
+
+    const ciudadDestino = document.getElementById("ciudadDestino")?.value;
+    const paisDestino = document.getElementById("paisDestino")?.value;
+    const direccionDestino = document.getElementById("direccionDestino")?.value;
+
+    const distanciaKm = parseFloat(document.getElementById("distanciaKm")?.value);
+    const tipoEnvio = document.getElementById("tipoEnvio")?.value;
+    const ventanaHoraria = document.getElementById("ventanaHoraria")?.value;
+    const volumen = parseFloat(document.getElementById("volumen")?.value);
+    const saturacionRuta = parseFloat(document.getElementById("saturacionRuta")?.value);
+
+    const fragil = document.getElementById("fragil")?.checked;
+    const frio = document.getElementById("frio")?.checked;
+
+    const notas = document.getElementById("notas")?.value || "";
 
     const envio = {
+
       remitente,
       destinatario,
-      origen,
-      destino,
+
+      origen: {
+        ciudad: ciudadOrigen,
+        pais: paisOrigen,
+        direccion: direccionOrigen
+      },
+
+      destino: {
+        ciudad: ciudadDestino,
+        pais: paisDestino,
+        direccion: direccionDestino
+      },
+
       distanciaKm,
       tipoEnvio,
       ventanaHoraria,
       volumen,
       fragil,
       frio,
-      saturacionRuta
+      saturacionRuta,
+      notas
+
     };
 
     fetch(`${API_URL}/envios`, {
@@ -96,12 +115,15 @@ function inicializarFormulario() {
       body: JSON.stringify(envio)
     })
       .then(response => {
+
         if (!response.ok) {
           throw new Error("Error en la respuesta del servidor");
         }
+
         return response.json();
       })
       .then(data => {
+
         console.log("Envío creado:", data);
 
         alert("Envío creado correctamente");
@@ -109,10 +131,15 @@ function inicializarFormulario() {
         form.reset();
 
         window.location.href = "index.html";
+
       })
       .catch(error => {
+
         console.error("Error:", error);
         alert("Error al crear el envío");
+
       });
+
   });
+
 }
