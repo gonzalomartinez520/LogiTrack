@@ -63,11 +63,11 @@ function inicializarFormulario() {
     const remitente = document.getElementById("remitente")?.value;
     const destinatario = document.getElementById("destinatario")?.value;
 
-    const origenCiudad = document.getElementById("ciudadOrigen")?.value;
+    const origen = document.getElementById("ciudadOrigen")?.value;
     const origenPais = document.getElementById("paisOrigen")?.value;
     const origenDireccion = document.getElementById("direccionOrigen")?.value;
 
-    const destinoCiudad = document.getElementById("ciudadDestino")?.value;
+    const destino = document.getElementById("ciudadDestino")?.value;
     const destinoPais = document.getElementById("paisDestino")?.value;
     const destinoDireccion = document.getElementById("direccionDestino")?.value;
 
@@ -87,11 +87,11 @@ function inicializarFormulario() {
       remitente,
       destinatario,
 
-      origenCiudad,
+      origen,
       origenPais,
       origenDireccion,
 
-      destinoCiudad,
+      destino,
       destinoPais,
       destinoDireccion,
 
