@@ -13,7 +13,7 @@ body {
 }
 
 .subtitle {
-  color: gray;
+  color: black; 
   margin-bottom: 20px;
 }
 
@@ -185,7 +185,6 @@ li{
    🔹 PANTALLA CREAR ENVÍO
 ========================= */
 
-/* Cards formulario */
 .card-form {
   background: white;
   padding: 20px;
@@ -193,7 +192,6 @@ li{
   margin-bottom: 20px;
 }
 
-/* Inputs */
 .card-form label {
   display: block;
   margin-top: 10px;
@@ -206,7 +204,6 @@ li{
   margin-top: 5px;
 }
 
-/* Botones */
 .botones {
   display: flex;
   justify-content: space-between;
@@ -235,11 +232,6 @@ li{
 #frio {
   width: 6%;
 }
-
-
-
-
-
 
 /* =========================
    🔹 AJUSTE DETALLE DESKTOP
@@ -272,15 +264,3 @@ padding:8px;
 border-radius:6px;
 margin-bottom:8px;
 }
-     
-
-
-
-
-
-
-
-
-
-
-
