@@ -3,22 +3,38 @@
 ========================= */
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
-  background: #f5f6fa;
+  background: #f5f5f5;
 }
 
 .container {
+  width: 900px;
+  margin: auto;
   padding: 30px;
 }
 
 .subtitle {
-  color: black; 
+  color: black;
   margin-bottom: 20px;
 }
 
 hr {
   margin: 20px 0;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+p {
+  margin-top: 3px;
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 12px;
+  color: black;
 }
 
 /* =========================
@@ -62,24 +78,29 @@ nav .active {
   padding: 20px;
   background: white;
   border-radius: 10px;
+  margin-bottom: 20px;
 }
 
 .warning {
-  background: #fff3cd;
+  background: #e0f56d;
 }
 
 .info {
-  background: #dbeafe;
+  background: #75affa;
 }
 
 .success {
-  background: #d1fae5;
+  background: #32d882;
 }
 
 .search {
   width: 100%;
   padding: 10px;
   margin-bottom: 20px;
+}
+
+.search::placeholder {
+  color: black;
 }
 
 table {
@@ -98,91 +119,77 @@ th, td {
 }
 
 .badge {
-  background: orange;
-  padding: 5px 10px;
-  border-radius: 10px;
+  background: #f1c40f;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: bold;
 }
 
 /* =========================
-   🔹 PANTALLA DETALLE DE ENVÍO (FINAL)
+   🔹 DETALLE DE ENVÍO
 ========================= */
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    background:#f5f5f5;
-    margin:0;
+
+.tracking {
+  color: black;
+  margin-bottom: 20px;
 }
 
-.container{
-    width:900px;
-    margin:auto;
-    padding:30px;
+.volver {
+  text-decoration: none;
+  color: black;
+  display: inline-block;
+  margin-bottom: 20px;
 }
 
-h1{
-    margin-bottom:5px;
+.estado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
-.tracking{
-    color:#666;
+.estado h3 {
+  margin: 0;
 }
 
-.volver{
-    text-decoration:none;
-    color:#555;
-    display:inline-block;
-    margin-bottom:20px;
+.estado p {
+  margin: 3px 0 0 0;
 }
 
-.estado{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:white;
-    padding:20px;
-    border-radius:8px;
-    margin-bottom:20px;
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-.badge{
-    background:#f1c40f;
-    padding:8px 14px;
-    border-radius:20px;
-    font-weight:bold;
+.grid2 .card {
+  margin-bottom: 0;
 }
 
-.card{
-    background:white;
-    padding:20px;
-    border-radius:8px;
-    margin-bottom:20px;
+ul {
+  padding-left: 20px;
 }
 
-.grid2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+li {
+  margin-bottom: 5px;
 }
 
-label{
-    font-size:12px;
-    color:#888;
+#historial {
+  margin-top: 10px;
 }
 
-p{
-    margin-top:3px;
-    margin-bottom:15px;
-}
-
-ul{
-    padding-left:20px;
-}
-
-li{
-    margin-bottom:5px;
+#historial li {
+  background: #f5f6fa;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
 }
 
 /* =========================
-   🔹 PANTALLA CREAR ENVÍO
+   🔹 CREAR ENVÍO
 ========================= */
 
 .card-form {
@@ -202,6 +209,10 @@ li{
   width: 95%;
   padding: 10px;
   margin-top: 5px;
+}
+
+.card-form textarea::placeholder {
+  color: black;
 }
 
 .botones {
@@ -225,42 +236,3 @@ li{
   cursor: pointer;
 }
 
-#fragil {
-  width: 15%;
-}
-
-#frio {
-  width: 6%;
-}
-
-/* =========================
-   🔹 AJUSTE DETALLE DESKTOP
-========================= */
-
-.tracking{
-color:#777;
-margin-bottom:20px;
-}
-
-.estado h3{
-margin:0;
-}
-
-.estado p{
-margin:3px 0 0 0;
-}
-
-.grid2 .card{
-margin-bottom:0;
-}
-
-#historial{
-margin-top:10px;
-}
-
-#historial li{
-background:#f5f6fa;
-padding:8px;
-border-radius:6px;
-margin-bottom:8px;
-}
